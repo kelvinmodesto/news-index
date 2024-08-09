@@ -1,0 +1,49 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `zed: Open Default Settings` command
+// from the command palette
+{
+  "remove_trailing_whitespace_on_save": true,
+  "git_status": true,
+  "ensure_final_newline_on_save": true,
+  "languages": {
+    "Markdown": {
+      "tab_size": 2,
+      "formatter": "prettier"
+    },
+    "YAML": {
+      "tab_size": 2,
+      "formatter": "prettier"
+    },
+    "JSON": {
+      "tab_size": 2,
+      "preferred_line_length": 100,
+      "formatter": "prettier"
+    },
+    "JSONC": {
+      "tab_size": 2,
+      "preferred_line_length": 100,
+      "formatter": "prettier"
+    },
+    "JavaScript": {
+      "tab_size": 2,
+      "formatter": "prettier"
+    },
+    "TypeScript": {
+      "tab_size": 2,
+      "formatter": "prettier"
+    },
+    "TSX": {
+      "tab_size": 2,
+      "formatter": "prettier"
+    },
+    "JavaScript React": {
+      "tab_size": 2,
+      "formatter": "prettier"
+    }
+  }
+}
