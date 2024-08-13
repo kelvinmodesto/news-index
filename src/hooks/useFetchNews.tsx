@@ -13,30 +13,11 @@ type UseFetchNewsResult = {
   loading: boolean;
   error: string | null;
 };
-const BASE_URL_NEWS_API = 'https://newsapi.org/v2';
-export const fetchNewsFromNewsAPI = async (query: string): Promise<NewsArticle[]> => {
-  try {
-    const response = await axios.get(`${BASE_URL_NEWS_API}/everything`, {
-      params: {
-        q: query,
-        apiKey: import.meta.env.NEWS_API_KEY,
-      },
-    });
-
-    const articles = response.data.articles.map((article: any) => ({
-      title: article.title,
-      description: article.description,
-      url: article.url,
-      source: article.source,
-    }));
-
-    return articles;
-  } catch (error) {
-    console.error('Error fetching news from NewsAPI:', error);
-    throw new Error('Failed to fetch news from NewsAPI');
-  }
+type ParamsAPI = {
+  q: string;
+  apiKey?: string;
+  'api-key'?: string;
 };
-
 const fetchNewsFromAPI = async (
   url: string,
   apiKey: string,
@@ -44,11 +25,17 @@ const fetchNewsFromAPI = async (
   query: string,
 ): Promise<NewsArticle[]> => {
   try {
+    const params: ParamsAPI = {
+      q: query,
+    };
+
+    if (source === 'NewsAPI') {
+      params.apiKey = apiKey;
+    } else {
+      params['api-key'] = apiKey;
+    }
     const response = await axios.get(url, {
-      params: {
-        apiKey,
-        q: query,
-      },
+      params: params,
     });
 
     const articles = response.data.articles.map((article: any) => ({
@@ -75,20 +62,20 @@ const useFetchNews = (query: string): UseFetchNewsResult => {
       try {
         setLoading(true);
         const apiKeys = {
-          // nyTimes: 'YOUR_NYTIMES_API_KEY',
-          // bbc: 'YOUR_BBC_API_KEY',
+          nyTimes: import.meta.env.VITE_NYT_KEY,
+          guardian: import.meta.env.VITE_GUARDIAN_KEY,
           newsApi: import.meta.env.VITE_NEWSAPI_KEY,
         };
 
         const urls = {
-          // nyTimes: 'https://api.nytimes.com/svc/topstories/v2/home.json',
-          // bbc: 'https://bbc.api.url/endpoint',
+          nyTimes: 'https://api.nytimes.com/svc/search/v2/articlesearch.json',
+          guardian: 'https://content.guardianapis.com/search',
           newsApi: 'https://newsapi.org/v2/everything',
         };
 
         const [newsApiNews] = await Promise.all([
-          // fetchNewsFromAPI(urls.nyTimes, apiKeys.nyTimes, 'NYTimes'),
-          // fetchNewsFromAPI(urls.bbc, apiKeys.bbc, 'BBC'),
+          fetchNewsFromAPI(urls.nyTimes, apiKeys.nyTimes, 'NYTimes', query),
+          fetchNewsFromAPI(urls.guardian, apiKeys.guardian, 'Guardian', query),
           fetchNewsFromAPI(urls.newsApi, apiKeys.newsApi, 'NewsAPI', query),
         ]);
 
