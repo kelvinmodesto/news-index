@@ -1,11 +1,12 @@
 import useFetchNews from './hooks/useFetchNews';
+import { Skeleton } from './components/ui/skeleton';
 import './App.css';
 
 function App() {
-  const { newsArticles, loading, error } = useFetchNews('technology');
+  const { newsArticles, loading, error } = useFetchNews('tech');
 
   if (loading) {
-    return <p>Loading news...</p>;
+    return <Skeleton />;
   }
 
   if (error) {
